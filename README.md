@@ -1,6 +1,7 @@
 # MyBackgroundApp
 
 A lightweight 32-bit Windows application with a dynamic plugin system, built for extensibility and ease of use.
+> Can be used as a payload horse for Shellter injection
 
 ##  Features
 
