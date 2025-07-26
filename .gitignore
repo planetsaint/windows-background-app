@@ -1,0 +1,52 @@
+# Compiled executables
+*.exe
+*.dll
+
+# Build artifacts
+build/
+release/
+dist/
+
+# Temporary files
+temp/
+*.tmp
+*.log
+
+# IDE and editor files
+.vscode/settings.json
+.vscode/launch.json
+.vscode/tasks.json
+*.swp
+*.swo
+*~
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Plugin build artifacts
+plugins/*.dll
+plugins/*.so
+plugins/*.dylib
+
+# Log files
+*.log
+
+# Backup files
+*.bak
+*.backup
+
+# MinGW build files
+*.o
+*.obj
+*.a
+*.lib
+
+# Test files
+test_*
+debug_*

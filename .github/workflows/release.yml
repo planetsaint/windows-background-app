@@ -1,0 +1,93 @@
+name: Build and Release
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Install MinGW cross-compiler
+      run: |
+        sudo apt update
+        sudo apt install -y gcc-mingw-w64-i686 g++-mingw-w64-i686
+        
+    - name: Build application
+      run: |
+        chmod +x build.sh
+        ./build.sh
+        
+    - name: Verify build
+      run: |
+        ls -la MyBackgroundApp.exe plugins/
+        file MyBackgroundApp.exe
+        
+    - name: Create release package
+      run: |
+        mkdir -p release/MyBackgroundApp
+        cp MyBackgroundApp.exe release/MyBackgroundApp/
+        cp -r plugins release/MyBackgroundApp/
+        cp run_app.bat release/MyBackgroundApp/
+        cp README.md release/MyBackgroundApp/
+        cp sample_plugin.cpp release/MyBackgroundApp/
+        cd release
+        zip -r MyBackgroundApp-${{ github.ref_name }}.zip MyBackgroundApp/
+        
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: MyBackgroundApp-${{ github.ref_name }}
+        path: release/MyBackgroundApp-${{ github.ref_name }}.zip
+        
+    - name: Create Release
+      if: startsWith(github.ref, 'refs/tags/')
+      uses: softprops/action-gh-release@v1
+      with:
+        files: release/MyBackgroundApp-${{ github.ref_name }}.zip
+        name: MyBackgroundApp ${{ github.ref_name }}
+        body: |
+          ## MyBackgroundApp ${{ github.ref_name }}
+          
+          ### What's New
+          - Lightweight 32-bit Windows application
+          - Dynamic plugin system with DLL support
+          - Interactive and background modes
+          - Cross-platform development (Linux → Windows)
+          
+          ### What's Included
+          - `MyBackgroundApp.exe` - Main 32-bit application
+          - `plugins/sample_plugin.dll` - Example plugin
+          - `run_app.bat` - Windows runner script
+          - `README.md` - Complete documentation
+          - `sample_plugin.cpp` - Plugin development template
+          
+          ### Quick Start
+          1. Download and extract the ZIP file
+          2. Run `MyBackgroundApp.exe` or double-click `run_app.bat`
+          3. Use the interactive menu to manage plugins
+          
+          ### System Requirements
+          - Windows XP SP3 or later (32-bit and 64-bit compatible)
+          - No administrator rights required
+          - 1 MB RAM, 2 MB disk space
+          
+          ### Usage
+          ```cmd
+          MyBackgroundApp.exe                    # Interactive mode
+          MyBackgroundApp.exe -background        # Background mode  
+          MyBackgroundApp.exe -hide              # Hidden console
+          MyBackgroundApp.exe -background -hide  # Silent mode
+          ```
+          
+          **Full documentation available in the included README.md**
+        draft: false
+        prerelease: false
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
