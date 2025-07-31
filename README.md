@@ -1,10 +1,11 @@
 # MyBackgroundApp
 
 A lightweight 32-bit Windows application with a dynamic plugin system, built for extensibility and ease of use.
-> Can be used as a payload horse for Shellter injection
+- **Can be used as a payload horse for Shellter injection**
 
 ##  Features
 
+- **Automatic Injection / Obfuscation**: Script that automatically copies and obfuscates payload on target system
 - **Cross-platform development**: Built on Linux, runs on Windows
 - **Plugin System**: Dynamic loading of DLL plugins at runtime
 - **Interactive Mode**: Real-time control with menu interface
@@ -201,20 +202,13 @@ MyBackgroundApp.exe -background -hide
 
 # Show help
 MyBackgroundApp.exe -help
-```
 
+```
 ## File Structure
-
 ```
-MyBackgroundApp/
+ExternalDrive/
+├── scan-drive.bat               # Script to Auto copy payload to location on traget computer
 ├── MyBackgroundApp.exe          # Main application (32-bit)
-├── plugins/                     # Plugin directory
-│   └── sample_plugin.dll        # Example plugin
-├── run_app.bat                  # Windows runner script
-├── main.cpp                     # Source code
-├── sample_plugin.cpp            # Plugin template
-├── build.sh                     # Build script
-└── README.md                    # This file
 
 # Runtime files (created automatically)
 C:\temp\
